@@ -2,6 +2,11 @@
 
 A lazy local cache for npm
 
+IEB -- my own TODO:
+* Merge published versions
+* Allow overwrite of 0.0.0, but fail on other overwrites.
+* Warn when proxied packages change version
+
 ### Why?
 
 - npm can be slow, down or return random errors if you have large deploys
