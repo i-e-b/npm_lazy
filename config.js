@@ -1,5 +1,10 @@
 var path = require('path'),
-    homePath = path.normalize(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']);
+    //homePath = path.normalize(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']);
+    homePath = path.normalize('w:/Temp/_npmlazy');
+	
+var second = 1000;
+var minute = 60 * second;
+var hour = 60 * minute;
 
 module.exports = {
   // Logging config
@@ -38,9 +43,9 @@ module.exports = {
   // Request config
 
   // max milliseconds to wait for each HTTP response
-  httpTimeout: 10000,
+  httpTimeout: 10 * second,
   // maximum number of retries per HTTP resource to get
-  maxRetries: 5,
+  maxRetries: 3,
   // whether or not HTTPS requests are checked against Node's list of CAs
   // set false if you are using your own npm mirror with a self-signed SSL cert
   rejectUnauthorized: true,
@@ -48,6 +53,7 @@ module.exports = {
   // Remote and local URL
 
   // external url to npm_lazy, no trailing /
+  // this is supplied back to the client, so if you have a load balancer, supply that.
   externalUrl: 'http://localhost:8080',
   // registry url with trailing /
   remoteUrl: 'https://registry.npmjs.com/',
