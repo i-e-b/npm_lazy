@@ -25,7 +25,12 @@ module.exports = {
   // Note: Since any relative path is resolved relative to the current working
   // directory when the server is started, you should use a full path.
 
-  cacheDirectory: homePath + '/.npm_lazy',
+  cacheDirectory: homePath + '/.npm_lazy/cache',
+
+  // Location to store packages that have been published to this instance
+  // Published packages never expire and should never be junked.
+  // Meta data for published packages never expires
+  permanentDirectory: homePath + '/.npm_lazy/permanent',
 
   // `cacheAge`: maximum age before an index is refreshed from remoteUrl
   // - negative value means no refresh (e.g. once cached, never update the package.json metadata)

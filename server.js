@@ -1,3 +1,4 @@
+// vim: noai:ts=2:sw=2
 var http = require('http'),
     path = require('path'),
     fs = require('fs'),
@@ -44,8 +45,10 @@ function start(config) {
     }
   }
 
+  var commonCache = new Cache({ path: config.cacheDirectory });
+
   Resource.configure({
-    cache: new Cache({ path: config.cacheDirectory }),
+    cache: commonCache,
     logger: log,
     cacheAge: config.cacheAge,
     maxRetries: config.maxRetries,
@@ -55,6 +58,7 @@ function start(config) {
   });
 
   var packageConfig = {
+    cache: commonCache,
     logger: log,
     externalUrl: config.externalUrl,
     remoteUrl: config.remoteUrl,
@@ -69,7 +73,7 @@ function start(config) {
   server.on('request', function(req, res) {
     if (!api.route(req, res)) {
       log.error('No route found', req.url);
-      Package.proxy(req, res);
+      //Package.proxy(req, res); // TODO: re-enable when publish code is done.
     }
   }).listen(config.port, config.host);
 
