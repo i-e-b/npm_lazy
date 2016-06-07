@@ -26,6 +26,18 @@ Here are all the ways in which npm_lazy is resilient to registry failures:
   - Metadata files must parse as JSON; if not, they are retried.
 - Metadata files are never discarded until a newer version can be fetched successfully. If the JSON metadata is older than `cacheAge` (default: 1 hour), we will attempt to contact the registry first. However, if contacting the registry fails, then the old version of the metadata is sent instead. This means that even when outages occur, you can install any package that has been installed at least once before.
 
+## New in version 1.10.x
+
+- Added support for scoped packages.
+
+## New in version 1.9.x
+
+- Added port, host, remote-url and external-url CLI command configurations (#47, thanks @albertosouza)
+
+## New in version 1.8.x
+
+- Better handling of npm private modules (#52, thanks @CL0SeY)
+
 ## New in version 1.7.x
 
 - introducing @CL0SeY as a co-maintainer / core contributor, and a solid set of improvements to the error handling in npm_lazy.
@@ -48,14 +60,6 @@ Added support for using a http proxy (note: not a [Socks5](http://en.wikipedia.o
 
 Note: if you already have a proxy for npm, make sure you don't run into an issue where npm uses the proxy when accessing npm_lazy. You don't want to have `npm install -> proxy -> npm_lazy -> proxy`, but rather `npm install -> npm_lazy -> proxy` since your proxy probably doesn't know how to connect to npm_lazy. You will need to disable npm's internal proxy config, [see this comment for the details](https://github.com/mixu/npm_lazy/issues/30#issuecomment-39546977).
 
-## New in version 1.4.x
-
-Bug fixes and improvements:
-
-- Fixed a bug with garbage collecting `package.json` files.
-- Fixed a bug which occurred when the package file on the registry was updated by the author without bumping the version, resulting in a checksum mismatch between the cached tarfile and the metadata. Thanks @univerio!
-- Added support for logging to file (`loggingOpts`). Thanks @Damiya!
-
 Check out the [changelog](changelog.md) for version history.
 
 ## Installation
@@ -77,6 +81,8 @@ To edit the configuration, start by initializing a file from the default config 
 To start the server with a custom configuration:
 
     npm_lazy --config ~/npm_lazy.config.js
+
+Make sure you also empty out any npm caches by running `npm cache clean`, as npm does its own local caching, which means that some files might still point directly to the registry rather than to the npm_lazy endpoints.
 
 ## Installation by cloning the repo
 
@@ -137,6 +143,9 @@ var path = require('path'),
 module.exports = {
   // Logging config
   loggingOpts: {
+
+    // show the ip address of the machine requesting the npm package
+    logRequesterIP: true,
     // Print to stdout with colors
     logToConsole: true,
     // Write to file
